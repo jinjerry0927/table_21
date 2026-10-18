@@ -46,7 +46,7 @@
 - 라운드 회고 및 저장 호환: complete
 - UI·문서 마감: complete
 - 단위·통합·브라우저·반복 플레이 검증: complete
-- 출시 기록·배포 확인: in_progress
+- 출시 기록·배포 확인: complete
 
 ## 완성판 검증 기록 (2026-10-19)
 
@@ -56,7 +56,14 @@
 - 1280×720 및 390px 모바일 화면 확인. 모션 감소 시 카드 등장 지연도 제거.
 - 저장 복구·이전 형식 호환·숨은 정보 비참조·선택 당시 확률 보존 확인.
 - `run_game.bat --check` 및 `git diff --check` 통과.
-- GitHub Pages 빌드 방식: workflow. 실제 배포와 버전 태그는 최종 확인 단계.
+- GitHub Actions 원격 검증·배포 성공: https://github.com/jinjerry0927/table_21/actions/runs/39142379143
+- 공개 실행 주소: https://jinjerry0927.github.io/table_21/
+- 공개 주소에서 자유 플레이·베팅·정산·회고·52종 카드판 확인, 브라우저 콘솔 오류 0건.
+- 완성 버전은 1.0.0으로 기록한다. 변경 내역은 CHANGELOG.md, 배포 및 버전 기록은 GitHub Actions/Releases에서 확인한다.
+
+## 종결 후 범위
+
+첫 완성 목표를 충족했다. 현재 범위에서는 오류 수정과 문서 보완을 수행하고, 추가 기능은 새 목표로 별도 합의한다. 저장 데이터는 브라우저 로컬에 유지되며 기기 간 동기화하지 않는다.
 
 ## 기존 V1 구현 상태
 
