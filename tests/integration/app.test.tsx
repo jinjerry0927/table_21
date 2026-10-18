@@ -14,6 +14,9 @@ describe('TABLE 21 사용자 흐름', () => {
     fireEvent.click(screen.getAllByRole('button', { name: '자유 플레이' })[0]);
     fireEvent.click(screen.getByRole('button', { name: '건너뛰기' }));
     expect(screen.getByText('베팅 금액')).toBeInTheDocument();
+    const analysis = screen.getByRole('complementary', { name: '확률 분석' });
+    expect(within(analysis).getAllByRole('img')).toHaveLength(52);
+    expect(within(analysis).getByLabelText('스페이드 A: 미공개 6장 / 6장')).toBeInTheDocument();
     const input = screen.getByRole('spinbutton');
     fireEvent.change(input, { target: { value: '10' } });
     fireEvent.click(screen.getByRole('button', { name: /베팅 확정/ }));

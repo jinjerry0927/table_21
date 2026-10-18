@@ -122,6 +122,29 @@ export interface GameState {
   dealerPeeked: boolean;
   stats: GameStats;
   notice: string;
+  roundReview?: RoundReviewEntry[];
+}
+
+export interface ProbabilityOdds {
+  win: number;
+  push: number;
+  loss: number;
+  hitBust: number;
+}
+
+export type ReviewAction = PlayerAction | 'INSURANCE_ACCEPT' | 'INSURANCE_DECLINE' | 'EVEN_MONEY';
+
+export interface RoundReviewSnapshot {
+  handNumber: number;
+  playerRanks: Rank[];
+  dealerUp: Rank | null;
+  total: number;
+  soft: boolean;
+  odds: ProbabilityOdds | null;
+}
+
+export interface RoundReviewEntry extends RoundReviewSnapshot {
+  action: ReviewAction;
 }
 
 export type GameEvent =

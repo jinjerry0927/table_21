@@ -16,8 +16,9 @@ import {
   type Rank,
 } from './types';
 
-const SIX_DECK_SIZE = 312;
-const RESHUFFLE_AT_REMAINING = Math.floor(SIX_DECK_SIZE * 0.25);
+export const SHOE_DECKS = 6;
+export const SHOE_SIZE = SHOE_DECKS * SUITS.length * RANKS.length;
+export const RESHUFFLE_AT_REMAINING = Math.floor(SHOE_SIZE * 0.25);
 const STARTING_BANKROLL_CENTS = 100_000;
 
 export const CHALLENGE_TARGETS: Record<ChallengeDifficulty, number> = {
@@ -111,10 +112,11 @@ export function createInitialState(stats = createEmptyStats(), now = Date.now())
     dealerPeeked: false,
     stats,
     notice: 'TABLE 21에 오신 것을 환영합니다.',
+    roundReview: [],
   };
 }
 
-export function createShoe(decks = 6): Card[] {
+export function createShoe(decks = SHOE_DECKS): Card[] {
   const cards: Card[] = [];
   for (let deck = 0; deck < decks; deck += 1) {
     for (const suit of SUITS) {
@@ -278,6 +280,7 @@ function startRound(state: GameState, amountCents: number, random: RandomSource)
     baseBetCents: amountCents,
     lastBetCents: amountCents,
     roundId: makeId('round'),
+    roundReview: [],
     roundProfitCents: 0,
     shoe,
     discard,
@@ -559,6 +562,7 @@ function nextRound(state: GameState, random: RandomSource): GameState {
     shoe,
     discard: nextDiscard,
     notice,
+    roundReview: [],
   };
 }
 

@@ -29,6 +29,17 @@ jobs:
         run: npm ci
       - name: Verify
         run: npm run verify
+      - name: Install browser for verification
+        run: npx playwright install --with-deps chromium
+      - name: Verify browser flows
+        run: npm run test:e2e
+      - name: Save browser report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-report
+          path: output/playwright
+          retention-days: 7
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

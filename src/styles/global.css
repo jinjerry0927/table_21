@@ -165,5 +165,83 @@ footer { min-height: 58px; padding: 18px clamp(20px,4vw,64px); display: flex; ju
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  *, *::before, *::after { scroll-behavior: auto !important; animation-delay: 0ms !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+
+.table-workspace { width: min(1840px, calc(100% - 40px)); margin: 18px auto 0; display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: start; gap: 18px; }
+.table-primary { min-width: 0; }
+.brand strong { white-space: nowrap; }
+.table-workspace .casino-table { width: 100%; min-width: 0; margin: 0; padding-inline: clamp(16px, 2vw, 40px); }
+.table-workspace .dealer-zone { grid-template-columns: 110px 46px minmax(0, 1fr); gap: 12px; padding-inline: clamp(12px, 4vw, 54px); }
+.probability-panel { min-width: 0; padding: 20px 16px; border: 1px solid var(--line); background: linear-gradient(155deg, #112a22, #081b15); box-shadow: 0 12px 30px rgba(0,0,0,.2); }
+.analysis-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.analysis-heading h2 { font-size: 21px; margin: 5px 0 0; }
+.analysis-heading .eyebrow { font-size: 9px; }
+.analysis-rule { border: 1px solid var(--line); padding: 6px; color: var(--gold); font-size: 9px; white-space: nowrap; }
+.analysis-basis { min-height: 32px; margin: 14px 0 10px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.analysis-odds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
+.analysis-odds > div { padding: 12px 5px; text-align: center; background: rgba(255,255,255,.025); }
+.analysis-odds dt { color: var(--muted); font-size: 10px; }
+.analysis-odds dd { margin: 8px 0 0; font: 23px Georgia, serif; font-variant-numeric: tabular-nums; }
+.analysis-odds .analysis-win { background: rgba(232,201,120,.09); color: var(--gold); }
+.analysis-bust { display: flex; justify-content: space-between; align-items: center; margin: 10px 0 22px; padding: 11px 12px; border: 1px solid rgba(216,104,104,.2); font-size: 11px; color: var(--muted); }
+.analysis-bust strong { color: #eda79b; font: 18px Georgia, serif; }
+.analysis-shoe { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 10px; }
+.analysis-shoe b { color: var(--ink); font-weight: 500; }
+.analysis-progress { display: block; width: 100%; height: 5px; margin: 9px 0; border: 0; appearance: none; background: #243d32; accent-color: var(--gold); }
+.analysis-progress::-webkit-progress-bar { background: #243d32; }
+.analysis-progress::-webkit-progress-value { background: var(--gold); }
+.analysis-progress::-moz-progress-bar { background: var(--gold); }
+.analysis-note { color: var(--muted); font-size: 10px; line-height: 1.6; margin: 8px 0; }
+.analysis-inventory-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 22px 0 10px; }
+.analysis-inventory-heading h3 { font-size: 13px; margin: 0; }
+.analysis-inventory-heading > span { color: var(--muted); font-size: 10px; }
+.analysis-suit { display: grid; grid-template-columns: 13px minmax(0, 1fr); gap: 5px; align-items: center; margin: 5px 0; }
+.analysis-suit-label { color: #d5e3d9; font: 17px Georgia, serif; }
+.analysis-card-row { display: grid; grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 3px; }
+.analysis-card { display: grid; gap: 5px; justify-items: center; padding: 7px 0 5px; border: 1px solid #e0cf9a; border-radius: 3px; background: #e9e4d4; color: #17392b; opacity: calc(.3 + var(--remaining-ratio) * .7); filter: grayscale(calc(1 - var(--remaining-ratio))); transition: opacity .15s, filter .15s; }
+.analysis-card b { font: bold 10px Georgia, serif; }
+.analysis-card small { font: 9px "Segoe UI", sans-serif; opacity: .75; }
+.analysis-card[data-remaining="0"] { background: #a8aaa7; border-color: #818781; color: #424a44; }
+.red-suit .analysis-suit-label { color: #ec978a; }
+.red-suit .analysis-card { color: #a33236; }
+.analysis-footnote { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line); color: var(--faint); font-size: 10px; line-height: 1.6; }
+@media (max-width: 1199px) {
+  .table-workspace { grid-template-columns: minmax(0, 1fr); width: calc(100% - 24px); }
+  .probability-panel { width: min(100%, 560px); justify-self: center; }
+}
+@media (max-width: 760px) {
+  .table-workspace { width: calc(100% - 12px); gap: 12px; }
+  .table-workspace .casino-table { padding-inline: 10px; }
+  .table-workspace .dealer-zone { grid-template-columns: 90px 40px minmax(0, 1fr); padding-inline: 12px; }
+}
+@media (max-height: 800px) and (min-width: 1200px) {
+  .table-workspace { margin-top: 10px; }
+  .probability-panel { padding-block: 15px; }
+}
+.round-review { margin-top: 18px; padding: 22px; border: 1px solid var(--line); background: #0b211a; }
+.review-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.review-heading h2 { margin: 6px 0 0; font-size: 20px; }
+.review-heading > span { color: var(--gold); font-size: 11px; white-space: nowrap; }
+.review-description, .review-footnote, .review-empty { color: var(--muted); font-size: 11px; line-height: 1.7; }
+.review-description { margin: 14px 0; }
+.review-result { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 12px; background: rgba(232,201,120,.06); font-size: 12px; }
+.review-result strong { color: var(--gold); }
+.review-scroll { max-width: 100%; overflow-x: auto; border: 1px solid rgba(255,255,255,.08); }
+.review-scroll:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.analysis-help { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 12px; }
+.review-scroll table { width: 100%; min-width: 490px; border-collapse: collapse; text-align: left; font-size: 12px; font-variant-numeric: tabular-nums; }
+.review-scroll th, .review-scroll td { padding: 13px 12px; border-bottom: 1px solid rgba(255,255,255,.06); }
+.review-scroll thead th { color: var(--muted); font-size: 10px; font-weight: 500; }
+.review-scroll tbody th { color: var(--gold); font-size: 11px; }
+.review-scroll td span, .review-scroll th small { display: block; color: var(--muted); font-size: 10px; font-weight: 400; }
+.review-scroll td strong { display: block; margin-top: 4px; font-size: 11px; }
+.review-scroll tr:last-child > * { border-bottom: 0; }
+.review-current { background: rgba(232,201,120,.07); }
+.review-delta { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+.review-footnote { margin: 12px 0 0; color: var(--faint); font-size: 10px; }
+@media (max-width: 760px) {
+  .round-review { padding: 18px 12px; margin-top: 12px; }
+  .analysis-help { grid-template-columns: minmax(0, 1fr); }
 }

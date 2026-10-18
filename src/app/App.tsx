@@ -6,11 +6,13 @@ import {
   getActionAvailability,
   getBetLimits,
   isNaturalBlackjack,
-  transition,
   validateBet,
 } from '../game/blackjack/engine';
 import type { Card, ChallengeDifficulty, GameEvent, GameState, PlayerAction, PlayerHand } from '../game/blackjack/types';
 import { TableAudio } from '../services/audio';
+import { ProbabilityPanel } from './ProbabilityPanel';
+import { RoundReview } from './RoundReview';
+import { transitionWithReview } from '../game/blackjack/review';
 import {
   clearStoredData,
   hasResumableGame,
@@ -36,7 +38,7 @@ const TUTORIAL_STEPS = [
 ];
 
 function gameReducer(state: GameState, event: GameEvent): GameState {
-  return transition(state, event);
+  return transitionWithReview(state, event);
 }
 
 export function App() {
@@ -194,7 +196,7 @@ function Lobby({ game, resumeGame, startSession, navigate }: {
         <div className="hero-copy">
           <span className="eyebrow">A PRIVATE TABLE AWAITS</span>
           <h1>당신의 판단으로<br /><em>21</em>에 가까이.</h1>
-          <p>현금과 연결되지 않은 가상 게임머니로 즐기는 정교한 싱글플레이 블랙잭.</p>
+          <p>가상 게임머니로 플레이하며, 카드 한 장이 바꾸는 확률과 나의 선택을 살펴보는 블랙잭.</p>
           <div className="hero-actions">
             <button type="button" className="primary gold" onClick={() => startSession('free')}>자유 플레이</button>
             <button type="button" className="secondary" onClick={() => navigate('help')}>규칙 먼저 보기</button>
@@ -327,6 +329,8 @@ function TableScreen({ game, dispatch, navigate, highlight, setMotionSkip }: {
         </div>
       )}
 
+      <div className="table-workspace">
+      <div className="table-primary">
       <section className="casino-table" aria-label="블랙잭 테이블">
         <div className={`dealer-zone ${highlight('dealer')}`}>
           <div className="zone-heading"><span className="eyebrow">HOUSE · S17</span><h2>딜러</h2></div>
@@ -378,6 +382,11 @@ function TableScreen({ game, dispatch, navigate, highlight, setMotionSkip }: {
           <div className="pause-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title"><span className="eyebrow">TABLE SAVED</span><h2 id="pause-title">게임이 일시 정지되었습니다</h2><p>현재 카드 순서와 모든 상태가 안전하게 저장되었습니다.</p><div><button className="primary" type="button" onClick={() => dispatch({ type: 'RESUME' })}>계속하기</button><button className="secondary" type="button" onClick={() => navigate('lobby')}>로비로</button></div></div>
         )}
       </section>
+
+      <RoundReview game={game} />
+      </div>
+      <ProbabilityPanel game={game} />
+      </div>
 
       <div className="keyboard-legend" aria-label="키보드 단축키"><span>H HIT</span><span>S STAND</span><span>D DOUBLE</span><span>P SPLIT</span><span>R SURRENDER</span><span>SPACE 연출 건너뛰기</span></div>
 
@@ -506,6 +515,10 @@ function HelpScreen() {
       <div className="page-heading"><span className="eyebrow">TABLE 21 V1 STANDARD</span><h1>게임 방법</h1><p>이 게임은 6덱, 딜러 S17, 블랙잭 3:2를 사용하는 고정 하우스 프리셋입니다.</p></div>
       <section className="rule-intro"><div className="rule-21">21</div><div><h2>목표와 카드 점수</h2><p>딜러보다 21에 가까운 점수를 만들되 21을 넘으면 즉시 패배합니다. 숫자 카드는 표시값, J/Q/K는 10, A는 유리하게 1 또는 11입니다. 여러 A도 필요한 만큼 1로 낮춰 계산합니다.</p><p><strong>BLACKJACK</strong>은 최초 두 장의 A + 10점 카드입니다. 스플릿으로 만든 21은 일반 21입니다.</p></div></section>
       <section className="rule-grid">{actions.map(([english, korean, description]) => <article key={english}><span>{english}</span><h2>{korean}</h2><p>{description}</p></article>)}</section>
+      <section className="help-columns analysis-help">
+        <article><h2>확률과 라운드 회고</h2><ul><li>승률은 현재 패에서 지금 STAND할 때의 승리 확률입니다.</li><li>버스트 확률은 다음 한 장을 더 받았을 때 21을 넘을 확률입니다.</li><li>분석에는 공개된 카드와 딜러의 블랙잭 확인 결과만 사용합니다.</li><li>테이블 아래 회고에서 선택 직전 패와 확률 변화를 확인할 수 있습니다.</li><li>보험 확인 전과 스플릿 중에는 확률을 표시하지 않습니다.</li></ul></article>
+        <article><h2>카드 현황과 저장</h2><ul><li>같은 문양·랭크의 카드가 6장씩 있습니다. 숫자는 아직 공개되지 않은 수입니다.</li><li>미공개 수에는 딜러 뒷면 카드도 포함됩니다.</li><li>라운드 사이 슈 잔여가 78장 미만이면 새 312장으로 초기화됩니다.</li><li>회고는 새로고침과 이어하기에서 복구되며 다음 라운드에서 비워집니다.</li><li>저장은 같은 브라우저·사이트 주소에서만 유지됩니다.</li></ul></article>
+      </section>
       <section className="help-columns"><article><h2>딜러와 정산</h2><ul><li>딜러는 16 이하에서 HIT, 모든 17에서 STAND합니다.</li><li>블랙잭은 3:2, 일반 승리는 1:1, 동점은 원금 반환입니다.</li><li>플레이어와 딜러의 동시 블랙잭은 PUSH입니다.</li><li>딜러 블랙잭은 플레이어의 일반 21보다 우선합니다.</li></ul></article><article><h2>보험과 이븐머니</h2><ul><li>딜러 오픈 카드가 A일 때 기본 베팅의 절반으로 보험을 선택할 수 있습니다.</li><li>딜러 블랙잭이면 보험은 2:1로 지급됩니다.</li><li>플레이어 블랙잭이면 EVEN MONEY로 1:1 이익을 즉시 확정할 수 있습니다.</li></ul></article><article><h2>모드 차이</h2><ul><li>자유 플레이: $1 최소 베팅, 별도 테이블 최대 한도 없음.</li><li>챌린지: 모두 $1,000 시작, 난이도별 목표와 보유금 구간별 한도 적용.</li><li>실제 돈, 현금성 보상, 전략 추천 기능은 없습니다.</li></ul></article></section>
     </div>
   );
